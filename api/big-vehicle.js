@@ -9,21 +9,37 @@ export default async function handler(req, res) {
       });
     }
 
-    const API_URL = `https://vechile-to-num-guv-la5d.vercel.app/api?key=VORTEX&type=vehicle_num&term=${onlymynk}`;
+    const API_URL = `http://api.subhxcosmo.in/api?key=VORTEX&type=vehicle_num&term=${onlymynk}`;
 
     const response = await fetch(API_URL);
-    const data = await response.json();
+
+    // 🔥 CHECK RESPONSE
+    if (!response.ok) {
+      return res.status(500).json({
+        status: false,
+        message: "External API failed"
+      });
+    }
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch (e) {
+      return res.status(500).json({
+        status: false,
+        message: "Invalid JSON from API"
+      });
+    }
 
     return res.status(200).json({
       status: true,
       developer: "@mynk_mynk_mynk",
+      vehicle_number: onlymynk,
       result: data
     });
 
   } catch (error) {
     return res.status(500).json({
       status: false,
-      message: "Server error"
-    });
-  }
-}
+      message:
