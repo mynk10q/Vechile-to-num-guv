@@ -6,39 +6,39 @@ export default async function handler(req, res) {
       return res.status(400).json({
         status: false,
         message: "Vehicle number required",
-        example: "/api/big-vehicle?onlymynk=MH28AL7284"
+        example: "/api/big-vehicle?onlymynk=UK01A1234"
       });
     }
 
-    const API_KEY = "ZEPH-0CBD7";
-    const API_URL = `https://api-sell-eight.vercel.app/api?key=${API_KEY}&type=BIG_VEHICLE_INFO&term=${onlymynk}`;
+    // ✅ NEW API
+    const API_KEY = "VORTEX";
+    const API_URL = `http://api.subhxcosmo.in/api?key=${API_KEY}&type=vehicle_num&term=${onlymynk}`;
 
     const response = await fetch(API_URL);
     const data = await response.json();
 
-    /* 🔥 FIX START */
+    /* 🔥 CLEAN + BRANDING FIX */
 
-    // Agar BUY_API exist karta ho (kahin bhi)
+    // Agar kisi bhi jagah BUY_API ho
     if (data.BUY_API) {
       data.BUY_API = "@mynk_mynk_mynk";
     }
 
-    // Agar nested object me ho
     if (data.result && data.result.BUY_API) {
       data.result.BUY_API = "@mynk_mynk_mynk";
     }
 
-    // Extra branding clean
+    // Extra fields remove
     delete data.SUPPORT;
     delete data.support;
     delete data.buy_api;
 
-    /* 🔥 FIX END */
+    /* 🔥 FINAL RESPONSE */
 
     return res.status(200).json({
       status: true,
       developer: "@mynk_mynk_mynk",
-      type: "BIG_VEHICLE_INFO",
+      type: "VEHICLE_INFO",
       vehicle_number: onlymynk,
       result: data
     });
