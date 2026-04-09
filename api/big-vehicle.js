@@ -14,34 +14,21 @@ export default async function handler(req, res) {
     const response = await fetch(API_URL);
     const text = await response.text();
 
-    // 🔥 STEP 1: parse outer JSON
-    let data = JSON.parse(text);
+    // 🔥 SUBHXCOSMO → @mynk replace (PURE RAW LEVEL)
+    const replacedText = text.replace(/SUBHXCOSMO/gi, "@mynk_mynk_mynk");
 
-    // 🔥 STEP 2: parse inner JSON if needed
+    // 🔥 JSON parse (double safe)
+    let data = JSON.parse(replacedText);
+
     if (typeof data.result === "string") {
       data.result = JSON.parse(data.result);
     }
 
-    // 🔥 CLEAN OWNER TEXT
-    let ownerRaw = data.result?.owner_name || data.owner || "";
-
-    const ownerClean = ownerRaw
-      .replace(/SUBHXCOSMO/gi, "@mynk_mynk_mynk")
-      .replace(/https?:\/\/\S+/g, "")
-      .replace(/\n/g, " ")
-      .trim();
-
-    // 🔥 FINAL RESPONSE
     return res.status(200).json({
       status: true,
       developer: "@mynk_mynk_mynk",
       vehicle_number: onlymynk,
-      owner: ownerClean,
-      vehicle: data.result?.vehicle_name || null,
-      model: data.result?.model || null,
-      fuel: data.result?.fuel_type || null,
-      rto: data.result?.rto || null,
-      mobile: data.result?.mobile_no || null
+      result: data
     });
 
   } catch (error) {
