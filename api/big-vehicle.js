@@ -13,33 +13,18 @@ export default async function handler(req, res) {
 
     const response = await fetch(API_URL);
 
-    // 🔥 CHECK RESPONSE
-    if (!response.ok) {
-      return res.status(500).json({
-        status: false,
-        message: "External API failed"
-      });
-    }
-
-    let data;
-
-    try {
-      data = await response.json();
-    } catch (e) {
-      return res.status(500).json({
-        status: false,
-        message: "Invalid JSON from API"
-      });
-    }
+    // 👇 RAW TEXT dekh
+    const text = await response.text();
 
     return res.status(200).json({
       status: true,
-      developer: "@mynk_mynk_mynk",
-      vehicle_number: onlymynk,
-      result: data
+      raw: text
     });
 
   } catch (error) {
     return res.status(500).json({
       status: false,
-      message:
+      error: error.message
+    });
+  }
+}
